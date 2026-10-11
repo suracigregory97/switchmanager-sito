@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SwitchManager — dalla bolletta al preventivo in 2 minuti</title>
+<meta name="description" content="Il programma per consulenti e agenti luce e gas: legge la bolletta, confronta le offerte, prepara il preventivo con il risparmio e ti dice chi richiamare. Prova gratis 30 giorni.">
+<meta property="og:title" content="SwitchManager — il comparatore luce e gas per consulenti">
+<meta property="og:description" content="Carica la bolletta, ottieni la classifica delle offerte e il preventivo pronto da inviare. Prova gratis 30 giorni.">
+<meta property="og:image" content="https://switchmanager.it/img/classifica.webp">
+<meta property="og:url" content="https://switchmanager.it/">
+<link rel="canonical" href="https://switchmanager.it/">
+<link rel="icon" href="img/favicon.png">
+<style>
+  :root {
+    --bg: #f6f7fb; --surface: #fff; --text: #0f172a; --muted: #475569; --faint: #64748b; --border: #e5e7eb;
+    --primary: #4f46e5; --primary-600: #4338ca; --primary-50: #eef2ff; --green: #059669; --green-50: #ecfdf5;
+    --grad: linear-gradient(135deg, #6366f1, #22c55e); --shadow: 0 10px 40px rgba(15, 23, 42, .10); --radius: 18px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0b1020; --surface: #121a2e; --text: #e6e9f2; --muted: #a6b0c3; --faint: #8b95a8; --border: #24304a;
+      --primary: #818cf8; --primary-600: #a5b4fc; --primary-50: #1e1b4b; --green: #34d399; --green-50: #052e24; --shadow: 0 10px 40px rgba(0, 0, 0, .35);
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 17px/1.6 "Segoe UI", system-ui, -apple-system, Roboto, sans-serif; -webkit-font-smoothing: antialiased; }
+  img { max-width: 100%; height: auto; display: block; }
+  a { color: var(--primary); }
+  .wrap { max-width: 1160px; margin: 0 auto; padding: 0 20px; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 13px 22px; border-radius: 12px; font-weight: 700; text-decoration: none; border: 0; cursor: pointer; font-size: 16px; }
+  .btn.primary { background: var(--primary); color: #fff; box-shadow: 0 6px 20px rgba(79, 70, 229, .35); }
+  .btn.primary:hover { background: var(--primary-600); }
+  .btn.ghost { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+  header.top { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--bg) 85%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); }
+  header.top .wrap { display: flex; align-items: center; gap: 18px; height: 64px; }
+  .marchio { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 19px; color: var(--text); text-decoration: none; letter-spacing: -.01em; }
+  .marchio img { width: 34px; height: 34px; }
+  nav.menu { margin-left: auto; display: flex; gap: 22px; align-items: center; }
+  nav.menu a { color: var(--muted); text-decoration: none; font-weight: 600; font-size: 15px; }
+  nav.menu a.btn { color: #fff; padding: 9px 16px; font-size: 15px; }
+  @media (max-width: 760px) { nav.menu a:not(.btn) { display: none; } }
+
+  .hero { padding: 64px 0 30px; text-align: center; }
+  .etichetta { display: inline-block; padding: 6px 14px; border-radius: 99px; background: var(--primary-50); color: var(--primary); font-weight: 700; font-size: 14px; }
+  .hero h1 { font-size: clamp(34px, 6vw, 60px); line-height: 1.07; letter-spacing: -.035em; margin: 18px auto 16px; max-width: 880px; }
+  .hero h1 span { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .hero p.sotto { font-size: clamp(17px, 2.2vw, 20px); color: var(--muted); max-width: 720px; margin: 0 auto 28px; }
+  .azioni { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .nota { color: var(--faint); font-size: 14px; margin-top: 12px; }
+  .schermo { margin: 46px auto 0; max-width: 1060px; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow); border: 1px solid var(--border); background: var(--surface); }
+  .schermo .barra { height: 34px; display: flex; align-items: center; gap: 7px; padding: 0 14px; border-bottom: 1px solid var(--border); }
+  .schermo .barra i { width: 11px; height: 11px; border-radius: 50%; background: #e2e8f0; }
+
+  .punti { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin: 46px 0 10px; }
+  .punti div { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; font-size: 15px; color: var(--muted); }
+  .punti b { display: block; color: var(--text); font-size: 16px; margin-bottom: 2px; }
+  @media (max-width: 860px) { .punti { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+  section { padding: 70px 0; }
+  h2 { font-size: clamp(28px, 4vw, 40px); letter-spacing: -.025em; line-height: 1.15; margin: 0 0 12px; }
+  .intro { color: var(--muted); max-width: 680px; margin: 0 0 36px; font-size: 18px; }
+  .passo { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 40px; align-items: center; margin-bottom: 64px; }
+  .passo:nth-child(even) { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+  .passo:nth-child(even) .testo { order: 2; }
+  .passo .n { width: 38px; height: 38px; border-radius: 12px; background: var(--grad); color: #fff; display: grid; place-items: center; font-weight: 800; margin-bottom: 14px; }
+  .passo h3 { font-size: 26px; letter-spacing: -.02em; margin: 0 0 10px; }
+  .passo p { color: var(--muted); margin: 0 0 10px; }
+  .immagine { border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); border: 1px solid var(--border); background: var(--surface); }
+  @media (max-width: 860px) { .passo, .passo:nth-child(even) { grid-template-columns: 1fr; gap: 20px; } .passo:nth-child(even) .testo { order: 0; } }
+
+  .funzioni { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .funzioni div { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; }
+  .funzioni h4 { margin: 0 0 6px; font-size: 18px; }
+  .funzioni p { margin: 0; color: var(--muted); font-size: 15.5px; }
+  .funzioni .ic { font-size: 22px; margin-bottom: 8px; }
+  @media (max-width: 900px) { .funzioni { grid-template-columns: minmax(0, 1fr); } }
+
+  .prezzi { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; align-items: stretch; }
+  .piano { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; display: flex; flex-direction: column; }
+  .piano.top { border: 2px solid var(--primary); box-shadow: var(--shadow); position: relative; }
+  .piano.top::before { content: "Il più scelto"; position: absolute; top: -13px; left: 24px; background: var(--primary); color: #fff; font-size: 13px; font-weight: 700; padding: 3px 12px; border-radius: 99px; }
+  .piano h3 { margin: 0; font-size: 20px; }
+  .piano .prezzo { font-size: 44px; font-weight: 800; letter-spacing: -.03em; margin: 10px 0 0; }
+  .piano .prezzo small { font-size: 16px; color: var(--faint); font-weight: 600; }
+  .piano ul { padding: 0; list-style: none; margin: 18px 0 24px; color: var(--muted); font-size: 15.5px; }
+  .piano li { padding: 5px 0 5px 26px; position: relative; }
+  .piano li::before { content: "✓"; position: absolute; left: 0; color: var(--green); font-weight: 800; }
+  .piano .btn { margin-top: auto; justify-content: center; }
+  @media (max-width: 900px) { .prezzi { grid-template-columns: minmax(0, 1fr); } }
+
+  details { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 16px 20px; margin-bottom: 10px; }
+  summary { font-weight: 700; cursor: pointer; }
+  details p { color: var(--muted); margin: 10px 0 0; }
+
+  .contatto { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 34px; background: var(--surface); border: 1px solid var(--border); border-radius: 24px; padding: 34px; box-shadow: var(--shadow); }
+  @media (max-width: 860px) { .contatto { grid-template-columns: 1fr; padding: 22px; } }
+  form { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  form .tutto { grid-column: 1 / -1; }
+  label { font-size: 14px; font-weight: 600; color: var(--muted); display: block; margin-bottom: 5px; }
+  input, select, textarea { width: 100%; font: inherit; font-size: 16px; padding: 11px 13px; border-radius: 11px; border: 1px solid var(--border); background: var(--bg); color: var(--text); }
+  textarea { min-height: 90px; resize: vertical; }
+  .consenso { font-size: 14px; color: var(--muted); display: flex; gap: 10px; align-items: flex-start; }
+  .consenso input { width: auto; margin-top: 4px; }
+  .esca { position: absolute; left: -5000px; }
+  .esito { grid-column: 1 / -1; font-weight: 600; }
+  @media (max-width: 560px) { form { grid-template-columns: 1fr; } }
+
+  footer { border-top: 1px solid var(--border); padding: 30px 0 44px; color: var(--faint); font-size: 14px; }
+  footer .wrap { display: flex; gap: 18px; flex-wrap: wrap; justify-content: space-between; }
+  footer a { color: var(--faint); }
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="marchio" href="#"><img src="img/logo.png" alt="">SwitchManager</a>
+  <nav class="menu"><a href="#come">Come funziona</a><a href="#funzioni">Funzioni</a><a href="#prezzi">Prezzi</a><a href="#domande">Domande</a>
+    <a class="btn primary" href="#prova">Prova gratis</a></nav>
+</div></header>
+
+<main>
+<section class="hero"><div class="wrap">
+  <span class="etichetta">Per consulenti e agenti luce e gas</span>
+  <h1>Dalla bolletta al preventivo <span>in 2 minuti</span></h1>
+  <p class="sotto">SwitchManager legge la bolletta del cliente, la confronta con le tue offerte e prepara il preventivo con il risparmio, pronto da mandare su WhatsApp. E ti dice ogni giorno chi richiamare.</p>
+  <div class="azioni"><a class="btn primary" href="#prova">Prova gratis 30 giorni</a><a class="btn ghost" href="#come">Guarda come funziona</a></div>
+  <div class="nota">Nessuna carta richiesta · Windows 10 e 11 · in italiano</div>
+  <div class="schermo"><div class="barra"><i></i><i></i><i></i></div><img src="img/classifica.webp" alt="Classifica delle offerte con il risparmio stimato per il cliente" width="1600" height="963"></div>
+  <div class="punti">
+    <div><b>Lettura gratuita</b>La bolletta PDF si legge sul tuo PC, senza costi</div>
+    <div><b>Confronto alla pari</b>Solo la parte che cambia tra i fornitori</div>
+    <div><b>Dati al sicuro</b>I dati dei tuoi clienti restano sul tuo computer</div>
+    <div><b>Sempre aggiornato</b>PUN e PSV ufficiali, aggiornamenti automatici</div>
+  </div>
+</div></section>
+
+<section id="come"><div class="wrap">
+  <h2>Come funziona</h2>
+  <p class="intro">Tre passaggi, dalla bolletta che il cliente ti manda su WhatsApp al preventivo firmato.</p>
+  <div class="passo"><div class="testo"><div class="n">1</div><h3>Carica la bolletta</h3>
+    <p>Trascini il PDF: SwitchManager trova da solo consumo annuo, fasce, prezzo, quota fissa, periodo, POD e dati del cliente.</p>
+    <p>La lettura dei PDF è gratuita. Per foto e scansioni c'è l'intelligenza artificiale, a pochi centesimi e solo se la chiedi tu.</p></div>
+    <div class="immagine"><img src="img/bolletta.webp" alt="Bolletta letta: dati trovati dal PDF senza AI" loading="lazy" width="1400" height="1085"></div></div>
+  <div class="passo"><div class="testo"><div class="n">2</div><h3>Ottieni la classifica</h3>
+    <p>Tutte le offerte ordinate per costo per il cliente, con il risparmio in verde e il calcolo spiegato riga per riga.</p>
+    <p>Offerte fisse, indicizzate PUN e PSV, per fasce: il confronto usa gli indici ufficiali dell'ultimo mese.</p></div>
+    <div class="immagine"><img src="img/classifica.webp" alt="Classifica delle offerte" loading="lazy" width="1600" height="963"></div></div>
+  <div class="passo"><div class="testo"><div class="n">3</div><h3>Invia il preventivo</h3>
+    <p>Un PDF chiaro con il tuo logo, pronto per WhatsApp o email in un clic. Il cliente vede subito quanto risparmia.</p>
+    <p>Quando firma, segni il contratto e segui la pratica fino all'incasso della provvigione.</p></div>
+    <div class="immagine"><img src="img/preventivo.webp" alt="Preventivo in PDF con il logo dell'agenzia" loading="lazy" width="1000" height="1412"></div></div>
+</div></section>
+
+<section id="funzioni" style="padding-top:20px"><div class="wrap">
+  <h2>Tutto quello che serve a un consulente</h2>
+  <p class="intro">Non solo un comparatore: il tuo gestionale per chiudere più contratti.</p>
+  <div class="funzioni">
+    <div><div class="ic">📈</div><h4>Opportunità automatiche</h4><p>Quando arriva un'offerta migliore, il programma ti elenca i clienti che risparmierebbero e di quanto. Lavoro pronto, senza cercare.</p></div>
+    <div><div class="ic">📋</div><h4>Pratiche e provvigioni</h4><p>Firmata, inviata, attiva, KO. Provvigioni maturate, incassate, da incassare e storni, sempre sotto controllo.</p></div>
+    <div><div class="ic">🔔</div><h4>Promemoria</h4><p>Preventivi senza risposta, prezzi dei clienti in scadenza, richiami: ogni giorno sai chi chiamare.</p></div>
+    <div><div class="ic">🏷️</div><h4>Le tue offerte</h4><p>Inserisci le CTE dei fornitori con cui lavori, anche leggendo il PDF della CTE con l'AI. Fisse, indicizzate, per fasce.</p></div>
+    <div><div class="ic">👥</div><h4>Clienti in un minuto</h4><p>Crea il cliente dalla bolletta o importa la tua lista da Excel, senza doppioni.</p></div>
+    <div><div class="ic">🛡️</div><h4>Backup e privacy</h4><p>I dati restano sul tuo PC, con backup automatico ogni giorno. Cambi computer? Si sposta tutto in due clic.</p></div>
+  </div>
+  <div class="passo" style="margin:56px 0 0"><div class="testo"><h3>Chi chiamare oggi</h3><p>Le opportunità mostrano i clienti che risparmierebbero con le offerte di oggi, con il telefono e il pulsante per preparare il preventivo.</p></div>
+    <div class="immagine"><img src="img/opportunita.webp" alt="Elenco dei clienti che risparmierebbero" loading="lazy" width="1400" height="530"></div></div>
+</div></section>
+
+<section id="prezzi"><div class="wrap">
+  <h2>Prezzi semplici</h2>
+  <p class="intro">Provi tutto gratis per 30 giorni. Poi scegli tu: nessun vincolo, nessun costo nascosto.</p>
+  <p class="etichetta" style="margin:-18px 0 30px">Prezzi di lancio · l'acquisto delle licenze apre a breve: prenota il tuo posto con il modulo</p>
+  <div class="prezzi">
+    <div class="piano"><h3>Prova gratuita</h3><div class="prezzo">0 €<small> / 30 giorni</small></div>
+      <ul><li>Tutte le funzioni</li><li>Nessuna carta richiesta</li><li>Alla fine i tuoi dati restano consultabili</li></ul>
+      <a class="btn ghost" href="#prova">Scarica e prova</a></div>
+    <div class="piano top"><h3>Annuale</h3><div class="prezzo">290 €<small> / anno</small></div>
+      <ul><li>2 mesi gratis rispetto al mensile</li><li>Aggiornamenti inclusi</li><li>Assistenza via WhatsApp ed email</li></ul>
+      <a class="btn primary" href="#prova" data-interesse="Licenza annuale">Prenota l'annuale</a></div>
+    <div class="piano"><h3>Mensile</h3><div class="prezzo">29 €<small> / mese</small></div>
+      <ul><li>Tutte le funzioni</li><li>Aggiornamenti inclusi</li><li>Disdici quando vuoi</li></ul>
+      <a class="btn ghost" href="#prova" data-interesse="Licenza mensile">Prenota il mensile</a></div>
+  </div>
+  <p class="nota">Prezzi per singolo computer. L'intelligenza artificiale è facoltativa: se la usi, la paghi a consumo con la tua chiave, in media meno di un centesimo a bolletta.</p>
+</div></section>
+
+<section id="domande" style="padding-top:20px"><div class="wrap" style="max-width:860px">
+  <h2>Domande frequenti</h2>
+  <details><summary>Dove finiscono i dati dei miei clienti?</summary><p>Restano solo sul tuo computer, con un backup automatico nella cartella che scegli (anche OneDrive o una chiavetta). Nessun dato dei tuoi clienti viene inviato a noi.</p></details>
+  <details><summary>Quali bollette legge?</summary><p>Le bollette PDF dei principali fornitori italiani di luce e gas, con il formato standard ARERA. Per foto e scansioni serve l'intelligenza artificiale, facoltativa.</p></details>
+  <details><summary>Il risparmio mostrato è garantito?</summary><p>No: è una stima basata sui dati della bolletta e sulle condizioni delle offerte che inserisci. Il confronto considera solo energia e quota fissa di vendita, perché rete, oneri e imposte sono uguali con tutti i fornitori.</p></details>
+  <details><summary>Funziona su Mac o sul telefono?</summary><p>Per ora solo su Windows 10 e 11. Le versioni per Mac e telefono sono in programma.</p></details>
+  <details><summary>Come ricevo la licenza dopo la prova?</summary><p>Nel programma trovi il codice del tuo PC: compila il modulo qui sotto, ti mandiamo il link di pagamento e, appena ricevuto, la licenza da incollare. Ci vuole un minuto.</p></details>
+  <details><summary>E se cambio computer?</summary><p>Scarichi il backup dal vecchio PC, lo importi sul nuovo e ci scrivi: spostiamo la licenza senza costi.</p></details>
+</div></section>
+
+<section id="prova"><div class="wrap">
+  <div class="contatto">
+    <div>
+      <h2>Prova gratis 30 giorni</h2>
+      <p class="intro" style="margin-bottom:20px">Scarica SwitchManager e installalo: in un minuto sei pronto.</p>
+      <a class="btn primary" href="https://github.com/suracigregory97/switch-manager-aggiornamenti/releases/latest" rel="noopener">⬇ Scarica per Windows</a>
+      <p class="nota" style="text-align:left">Al primo avvio Windows potrebbe mostrare "PC protetto": clicca "Ulteriori informazioni" e poi "Esegui comunque".</p>
+      <p style="color:var(--muted);margin-top:24px">Vuoi attivare la licenza o hai domande? Scrivici con il modulo: ti rispondiamo in giornata.</p>
+    </div>
+    <form id="modulo" novalidate>
+      <div><label for="f-nome">Nome e cognome</label><input id="f-nome" name="nome" required autocomplete="name"></div>
+      <div><label for="f-tel">Telefono / WhatsApp</label><input id="f-tel" name="telefono" autocomplete="tel" inputmode="tel"></div>
+      <div class="tutto"><label for="f-email">Email</label><input id="f-email" name="email" type="email" required autocomplete="email"></div>
+      <div><label for="f-cosa">Ti interessa</label><select id="f-cosa" name="interesse"><option>Informazioni</option><option>Licenza annuale</option><option>Licenza mensile</option><option>Più postazioni / agenzia</option></select></div>
+      <div><label for="f-pc">Codice PC (se hai già il programma)</label><input id="f-pc" name="codice_pc" placeholder="es. K7QM-3XWD-P9TA"></div>
+      <div class="tutto"><label for="f-msg">Messaggio</label><textarea id="f-msg" name="messaggio"></textarea></div>
+      <input class="esca" name="sito_web" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <label class="consenso tutto"><input type="checkbox" id="f-ok" required> Ho letto l'<a href="privacy.html" target="_blank">informativa privacy</a> e acconsento a essere ricontattato per questa richiesta.</label>
+      <div class="tutto"><button class="btn primary" type="submit">Invia la richiesta</button></div>
+      <div class="esito" id="esito" role="status"></div>
+    </form>
+  </div>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <div>© 2026 SwitchManager · Gregory Suraci · <a href="#prova">Contatti</a><!-- All'apertura delle vendite: aggiungere P. IVA e indirizzo (obbligatori) --></div>
+  <div><a href="privacy.html">Privacy</a> · <a href="condizioni.html">Condizioni di vendita</a></div>
+</div></footer>
+
+<script>
+  // Le richieste arrivano nel Foglio Google dell'editore, scheda "Richieste".
+  const DESTINAZIONE = 'https://script.google.com/macros/s/AKfycby_mgLsuPlT4xTHtmFmE717bRmoVfCvl5WozujGseCcHpLIkouv9jDrv6sXRZ14KK5ztA/exec';
+  const f = document.getElementById('modulo'), esito = document.getElementById('esito');
+  f.addEventListener('submit', async e => {
+    e.preventDefault();
+    const d = Object.fromEntries(new FormData(f));
+    if (d.sito_web) return;                                   // compilato solo dai programmi automatici
+    if (!d.nome.trim() || !/^\S+@\S+\.\S+$/.test(d.email)) { esito.textContent = 'Scrivi nome ed email.'; esito.style.color = '#dc2626'; return; }
+    if (!document.getElementById('f-ok').checked) { esito.textContent = 'Serve il consenso per poterti ricontattare.'; esito.style.color = '#dc2626'; return; }
+    const btn = f.querySelector('button'); btn.disabled = true; btn.textContent = 'Invio…';
+    try {
+      await fetch(DESTINAZIONE, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ tipo: 'richiesta', ...d, pagina: location.href }) });
+      f.reset(); esito.style.color = 'var(--green)'; esito.textContent = 'Grazie! Ti ricontattiamo in giornata.';
+    } catch (err) { esito.style.color = '#dc2626'; esito.textContent = 'Invio non riuscito: riprova tra poco.'; }
+    btn.disabled = false; btn.textContent = 'Invia la richiesta';
+  });
+  // i pulsanti dei prezzi preimpostano la scelta nel modulo
+  document.querySelectorAll('[data-interesse]').forEach(a => a.addEventListener('click', () => { document.getElementById('f-cosa').value = a.dataset.interesse; }));
+</script>
+</body>
+</html>
