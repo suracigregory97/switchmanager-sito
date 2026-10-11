@@ -104,6 +104,7 @@
   .consenso { font-size: 14px; color: var(--muted); display: flex; gap: 10px; align-items: flex-start; }
   .consenso input { width: auto; margin-top: 4px; }
   .esca { position: absolute; left: -5000px; }
+  .scaricato { margin-top: 14px; padding: 12px 16px; border-radius: 12px; background: var(--green-50); color: var(--text); font-size: 15px; }
   .esito { grid-column: 1 / -1; font-weight: 600; }
   @media (max-width: 560px) { form { grid-template-columns: 1fr; } }
 
@@ -200,8 +201,9 @@
     <div>
       <h2>Prova gratis 30 giorni</h2>
       <p class="intro" style="margin-bottom:20px">Scarica SwitchManager e installalo: in un minuto sei pronto.</p>
-      <a class="btn primary" href="https://github.com/suracigregory97/switch-manager-aggiornamenti/releases/latest" rel="noopener">⬇ Scarica per Windows</a>
-      <p class="nota" style="text-align:left">Al primo avvio Windows potrebbe mostrare "PC protetto": clicca "Ulteriori informazioni" e poi "Esegui comunque".</p>
+      <a class="btn primary" id="scarica" href="https://github.com/suracigregory97/switch-manager-aggiornamenti/releases/latest/download/SwitchManager-Setup.exe" rel="noopener">⬇ Scarica per Windows</a>
+      <div class="scaricato" id="scaricato" hidden><b>Download avviato.</b> Apri il file <b>SwitchManager-Setup.exe</b> che trovi nei Download e segui le istruzioni: un minuto e l'icona è sul desktop.</div>
+      <p class="nota" style="text-align:left">Circa 12 MB · Windows 10 e 11. Se Windows mostra "PC protetto", clicca "Ulteriori informazioni" e poi "Esegui comunque": succede con i programmi nuovi, il file è sicuro.</p>
       <p style="color:var(--muted);margin-top:24px">Vuoi attivare la licenza o hai domande? Scrivici con il modulo oppure a <a href="mailto:info@switchmanager.it">info@switchmanager.it</a>: ti rispondiamo in giornata.</p>
     </div>
     <form id="modulo" novalidate>
@@ -242,6 +244,7 @@
     } catch (err) { esito.style.color = '#dc2626'; esito.textContent = 'Invio non riuscito: riprova tra poco.'; }
     btn.disabled = false; btn.textContent = 'Invia la richiesta';
   });
+  document.getElementById('scarica').addEventListener('click', () => { document.getElementById('scaricato').hidden = false; });
   // i pulsanti dei prezzi preimpostano la scelta nel modulo
   document.querySelectorAll('[data-interesse]').forEach(a => a.addEventListener('click', () => { document.getElementById('f-cosa').value = a.dataset.interesse; }));
 </script>
