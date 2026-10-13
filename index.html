@@ -104,14 +104,31 @@
   .consenso { font-size: 14px; color: var(--muted); display: flex; gap: 10px; align-items: flex-start; }
   .consenso input { width: auto; margin-top: 4px; }
   .esca { position: absolute; left: -5000px; }
+  [hidden] { display: none !important; }
   .scaricato { margin-top: 14px; padding: 12px 16px; border-radius: 12px; background: var(--green-50); color: var(--text); font-size: 15px; }
   .esito { grid-column: 1 / -1; font-weight: 600; }
+  .protetto { margin-top: 16px; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--border); background: var(--bg); font-size: 15px; }
+  .protetto ol { margin: 6px 0 8px; padding-left: 22px; color: var(--muted); }
+  .protetto p { margin: 0; color: var(--muted); }
+  .solo-telefono { display: none; }
+  html.telefono .solo-telefono { display: block; }
+  html.telefono .solo-pc { display: none; }
+  form.link-pc { grid-template-columns: 1fr; }
+  form.link-pc .btn { width: 100%; justify-content: center; }
+  .fatto { padding: 16px 18px; border-radius: 12px; background: var(--green-50); font-size: 16px; }
+  .fatto b { display: block; font-size: 19px; margin-bottom: 4px; }
   @media (max-width: 560px) { form { grid-template-columns: 1fr; } }
 
   footer { border-top: 1px solid var(--border); padding: 30px 0 44px; color: var(--faint); font-size: 14px; }
   footer .wrap { display: flex; gap: 18px; flex-wrap: wrap; justify-content: space-between; }
   footer a { color: var(--faint); }
 </style>
+<script>
+  // telefono o tablet: il programma è per Windows, quindi al posto del download si offre il link da aprire sul PC
+  if (matchMedia('(max-width: 767px)').matches || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ||
+      (/Macintosh/.test(navigator.userAgent) && navigator.maxTouchPoints > 1)) document.documentElement.classList.add('telefono');
+</script>
+<script src="sito.js"></script>
 </head>
 <body>
 <header class="top"><div class="wrap">
@@ -125,7 +142,7 @@
   <span class="etichetta">Per consulenti e agenti luce e gas</span>
   <h1>Dalla bolletta al preventivo <span>in 2 minuti</span></h1>
   <p class="sotto">SwitchManager legge la bolletta del cliente, la confronta con le tue offerte e prepara il preventivo con il risparmio, pronto da mandare su WhatsApp. E ti dice ogni giorno chi richiamare.</p>
-  <div class="azioni"><a class="btn primary" href="#prova">Prova gratis 30 giorni</a><a class="btn ghost" href="#come">Guarda come funziona</a></div>
+  <div class="azioni"><a class="btn primary" href="#prova" data-mobile="Mandami il link per il PC">Prova gratis 30 giorni</a><a class="btn ghost" href="#come">Guarda come funziona</a></div>
   <div class="nota">Nessuna carta richiesta · Windows 10 e 11 · in italiano</div>
   <div class="schermo"><div class="barra"><i></i><i></i><i></i></div><img src="img/classifica.webp" alt="Classifica delle offerte con il risparmio stimato per il cliente" width="1600" height="963"></div>
   <div class="punti">
@@ -175,13 +192,13 @@
   <div class="prezzi">
     <div class="piano"><h3>Prova gratuita</h3><div class="prezzo">0 €<small> / 30 giorni</small></div>
       <ul><li>Tutte le funzioni</li><li>Nessuna carta richiesta</li><li>Alla fine i tuoi dati restano consultabili</li></ul>
-      <a class="btn ghost" href="#prova">Scarica e prova</a></div>
+      <a class="btn ghost" href="#prova" data-mobile="Mandami il link per il PC">Scarica e prova</a></div>
     <div class="piano top"><h3>Annuale</h3><div class="prezzo">290 €<small> / anno</small></div>
       <ul><li>2 mesi gratis rispetto al mensile</li><li>Aggiornamenti inclusi</li><li>Assistenza via WhatsApp ed email</li></ul>
-      <a class="btn primary" href="https://buy.stripe.com/9B600k3qWbEJ0TF1UFa3u00" target="_blank" rel="noopener">Acquista l'annuale</a></div>
+      <a class="btn primary" href="https://buy.stripe.com/9B600k3qWbEJ0TF1UFa3u00" target="_blank" rel="noopener" data-acquisto="annuale" data-valore="290">Acquista l'annuale</a></div>
     <div class="piano"><h3>Mensile</h3><div class="prezzo">29 €<small> / mese</small></div>
       <ul><li>Tutte le funzioni</li><li>Aggiornamenti inclusi</li><li>Nessun vincolo: rinnovi solo se vuoi</li></ul>
-      <a class="btn ghost" href="https://buy.stripe.com/bJebJ2d1w105aufbvfa3u01" target="_blank" rel="noopener">Acquista il mensile</a></div>
+      <a class="btn ghost" href="https://buy.stripe.com/bJebJ2d1w105aufbvfa3u01" target="_blank" rel="noopener" data-acquisto="mensile" data-valore="29">Acquista il mensile</a></div>
   </div>
   <p class="nota">Prezzi per singolo computer. Intelligenza artificiale inclusa: bollette e CTE si leggono con l'AI senza chiavi e senza costi aggiuntivi (300 bollette e 40 CTE al mese per licenza, più che sufficienti per un consulente).</p>
 </div></section>
@@ -200,10 +217,28 @@
   <div class="contatto">
     <div>
       <h2>Prova gratis 30 giorni</h2>
-      <p class="intro" style="margin-bottom:20px">Scarica SwitchManager e installalo: in un minuto sei pronto.</p>
-      <a class="btn primary" id="scarica" href="scarica.html" rel="noopener">⬇ Scarica per Windows</a>
-      <div class="scaricato" id="scaricato" hidden><b>Download avviato.</b> Apri il file <b>SwitchManager-Setup.exe</b> che trovi nei Download e segui le istruzioni: un minuto e l'icona è sul desktop.</div>
-      <p class="nota" style="text-align:left">Circa 12 MB · Windows 10 e 11. Se Windows mostra "PC protetto", clicca "Ulteriori informazioni" e poi "Esegui comunque": succede con i programmi nuovi, il file è sicuro.</p>
+      <div class="solo-pc">
+        <p class="intro" style="margin-bottom:20px">Scarica SwitchManager e installalo: in un minuto sei pronto.</p>
+        <a class="btn primary" id="scarica" href="scarica.html" rel="noopener">⬇ Scarica per Windows</a>
+        <div class="scaricato" id="scaricato" hidden><b>Download avviato.</b> Apri il file <b>SwitchManager-Setup.exe</b> che trovi nei Download e segui le istruzioni: un minuto e l'icona è sul desktop.</div>
+        <p class="nota" style="text-align:left">Circa 12 MB · Windows 10 e 11 · nessuna carta richiesta</p>
+        <div class="protetto">
+          <b>Se Windows mostra "Windows ha protetto il PC"</b>
+          <ol><li>Clicca <b>Ulteriori informazioni</b> (il testo sotto il messaggio).</li><li>Clicca <b>Esegui comunque</b>.</li></ol>
+          <p>È normale: Windows mostra questo avviso per i programmi appena pubblicati, che ha visto installare ancora poche volte. Non significa che il file sia pericoloso: SwitchManager si scarica solo da questo sito e i dati dei tuoi clienti restano sul tuo computer.</p>
+        </div>
+      </div>
+      <div class="solo-telefono">
+        <p class="intro" style="margin-bottom:16px">SwitchManager è un programma per <b>PC Windows</b>. Lasciaci la tua email (o il WhatsApp) e ti mandiamo il link da aprire sul computer.</p>
+        <form id="link-pc" class="link-pc" novalidate>
+          <div><label for="l-contatto">Email o numero WhatsApp</label><input id="l-contatto" name="contatto" required autocomplete="email" placeholder="nome@email.it oppure 333 1234567"></div>
+          <input class="esca" name="sito_web" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <label class="consenso"><input type="checkbox" id="l-ok" required> <span>Ho letto l'<a href="privacy.html" target="_blank">informativa privacy</a> e acconsento a ricevere il link e a essere ricontattato.</span></label>
+          <button class="btn primary" type="submit">Mandami il link per il PC</button>
+          <div class="esito" id="l-esito" role="status"></div>
+        </form>
+        <div class="fatto" id="l-fatto" hidden><b>Fatto! Aprilo dal tuo PC Windows</b><span id="l-dove"></span></div>
+      </div>
       <p style="color:var(--muted);margin-top:24px">Vuoi attivare la licenza o hai domande? Scrivici con il modulo oppure a <a href="mailto:info@switchmanager.it">info@switchmanager.it</a>: ti rispondiamo in giornata.</p>
     </div>
     <form id="modulo" novalidate>
@@ -214,7 +249,7 @@
       <div><label for="f-pc">Codice PC (se hai già il programma)</label><input id="f-pc" name="codice_pc" placeholder="es. K7QM-3XWD-P9TA"></div>
       <div class="tutto"><label for="f-msg">Messaggio</label><textarea id="f-msg" name="messaggio"></textarea></div>
       <input class="esca" name="sito_web" tabindex="-1" autocomplete="off" aria-hidden="true">
-      <label class="consenso tutto"><input type="checkbox" id="f-ok" required> Ho letto l'<a href="privacy.html" target="_blank">informativa privacy</a> e acconsento a essere ricontattato per questa richiesta.</label>
+      <label class="consenso tutto"><input type="checkbox" id="f-ok" required> <span>Ho letto l'<a href="privacy.html" target="_blank">informativa privacy</a> e acconsento a essere ricontattato per questa richiesta.</span></label>
       <div class="tutto"><button class="btn primary" type="submit">Invia la richiesta</button></div>
       <div class="esito" id="esito" role="status"></div>
     </form>
@@ -224,12 +259,39 @@
 
 <footer><div class="wrap">
   <div>© 2026 SwitchManager · switchmanager.it · <a href="mailto:info@switchmanager.it">info@switchmanager.it</a><!-- All'apertura delle vendite: aggiungere P. IVA e indirizzo (obbligatori) --></div>
-  <div><a href="privacy.html">Privacy</a> · <a href="condizioni.html">Condizioni di vendita</a></div>
+  <div><a href="privacy.html">Privacy</a> · <a href="condizioni.html">Condizioni di vendita</a> · <a href="#" onclick="SM.preferenzeCookie();return false">Preferenze cookie</a></div>
 </div></footer>
 
 <script>
-  // Le richieste arrivano nel Foglio Google dell'editore, scheda "Richieste".
-  const DESTINAZIONE = 'https://script.google.com/macros/s/AKfycby_mgLsuPlT4xTHtmFmE717bRmoVfCvl5WozujGseCcHpLIkouv9jDrv6sXRZ14KK5ztA/exec';
+  // configurazione, Pixel, consenso e UTM sono in sito.js
+  const invia = d => fetch(SM.config.DESTINAZIONE, { method: 'POST', mode: 'no-cors',
+    body: JSON.stringify({ tipo: 'richiesta', ...d, ...SM.utm(), pagina: location.href }) });
+  const telefono = document.documentElement.classList.contains('telefono');
+  if (telefono) document.querySelectorAll('[data-mobile]').forEach(a => { a.textContent = a.dataset.mobile; });
+
+  // dal telefono: link per il PC via email o WhatsApp
+  const fl = document.getElementById('link-pc'), lEsito = document.getElementById('l-esito');
+  fl.addEventListener('submit', async e => {
+    e.preventDefault();
+    const d = Object.fromEntries(new FormData(fl));
+    if (d.sito_web) return;
+    const c = d.contatto.trim(), cifre = c.replace(/[\s.\-()]/g, '');
+    const email = /^\S+@\S+\.\S+$/.test(c) ? c : '', tel = !email && /^\+?\d{8,15}$/.test(cifre) ? cifre : '';
+    lEsito.style.color = '#dc2626';
+    if (!email && !tel) { lEsito.textContent = 'Scrivi un\'email o un numero di telefono valido.'; return; }
+    if (!document.getElementById('l-ok').checked) { lEsito.textContent = 'Serve il consenso per mandarti il link.'; return; }
+    const btn = fl.querySelector('button'); btn.disabled = true; btn.textContent = 'Invio…';
+    try {
+      await invia({ modulo: 'link_pc', email, telefono: tel });
+      SM.traccia('Lead', { content_name: 'link_pc' });
+      fl.hidden = true;
+      document.getElementById('l-dove').textContent = email
+        ? ` Ti abbiamo mandato il link a ${email}: se non lo vedi, controlla anche lo spam.`
+        : ' Ti scriviamo su WhatsApp con il link da aprire sul computer.';
+      document.getElementById('l-fatto').hidden = false;
+    } catch (err) { lEsito.textContent = 'Invio non riuscito: riprova tra poco.'; btn.disabled = false; btn.textContent = 'Mandami il link per il PC'; }
+  });
+
   const f = document.getElementById('modulo'), esito = document.getElementById('esito');
   f.addEventListener('submit', async e => {
     e.preventDefault();
@@ -239,12 +301,16 @@
     if (!document.getElementById('f-ok').checked) { esito.textContent = 'Serve il consenso per poterti ricontattare.'; esito.style.color = '#dc2626'; return; }
     const btn = f.querySelector('button'); btn.disabled = true; btn.textContent = 'Invio…';
     try {
-      await fetch(DESTINAZIONE, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ tipo: 'richiesta', ...d, pagina: location.href }) });
+      await invia(d);
+      SM.traccia('Lead', { content_name: 'contatto' });
       f.reset(); esito.style.color = 'var(--green)'; esito.textContent = 'Grazie! Ti ricontattiamo in giornata.';
     } catch (err) { esito.style.color = '#dc2626'; esito.textContent = 'Invio non riuscito: riprova tra poco.'; }
     btn.disabled = false; btn.textContent = 'Invia la richiesta';
   });
   document.getElementById('scarica').addEventListener('click', () => { document.getElementById('scaricato').hidden = false; });
+  document.querySelectorAll('[data-acquisto]').forEach(a => a.addEventListener('click', () => {
+    SM.traccia('InitiateCheckout', { content_name: a.dataset.acquisto, value: Number(a.dataset.valore), currency: 'EUR' });
+  }));
   // i pulsanti dei prezzi preimpostano la scelta nel modulo
   document.querySelectorAll('[data-interesse]').forEach(a => a.addEventListener('click', () => { document.getElementById('f-cosa').value = a.dataset.interesse; }));
 </script>
