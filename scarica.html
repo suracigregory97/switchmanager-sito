@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Download di SwitchManager</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="img/favicon.png">
+<style>
+  :root { --bg: #f6f7fb; --text: #0f172a; --muted: #475569; --primary: #4f46e5; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #0b1020; --text: #e6e9f2; --muted: #a6b0c3; --primary: #818cf8; } }
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: var(--bg); color: var(--text);
+         font: 17px/1.6 "Segoe UI", system-ui, sans-serif; text-align: center; padding: 16px; }
+  a { color: var(--primary); font-weight: 700; }
+  p { color: var(--muted); }
+</style>
+</head>
+<body>
+<div>
+  <h1>Il download di SwitchManager sta partendo…</h1>
+  <p>Al termine apri il file <b>SwitchManager-Setup.exe</b> e segui l'installazione.</p>
+  <p>Non parte? <a id="link" href="#">Clicca qui</a> · <a href="index.html">Torna al sito</a></p>
+</div>
+<script>
+  // indirizzo fisso dell'ultima versione pubblicata
+  const u = ['https://github.com', 'suracigregory97', 'switch-manager-aggiornamenti', 'releases/latest/download/SwitchManager-Setup.exe'].join('/');
+  document.getElementById('link').href = u;
+  setTimeout(() => { location.href = u; }, 400);
+</script>
+</body>
+</html>
