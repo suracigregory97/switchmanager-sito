@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guarda SwitchManager in 2 minuti</title>
+<meta name="description" content="Video guidato: dalla bolletta del cliente al preventivo con il tuo logo, opportunità, pratiche e provvigioni. Il programma per consulenti luce e gas.">
+<meta property="og:title" content="SwitchManager in 2 minuti">
+<meta property="og:description" content="Dalla bolletta al preventivo, spiegato passo passo. Prova gratis 30 giorni.">
+<meta property="og:image" content="https://switchmanager.it/video/poster.jpg">
+<meta property="og:url" content="https://switchmanager.it/video.html">
+<meta property="og:type" content="video.other">
+<meta property="og:video" content="https://switchmanager.it/video/switchmanager-demo.mp4">
+<link rel="canonical" href="https://switchmanager.it/video.html">
+<link rel="icon" href="img/favicon.png">
+<style>
+  :root {
+    --bg: #f6f7fb; --surface: #fff; --text: #0f172a; --muted: #475569; --faint: #64748b; --border: #e5e7eb;
+    --primary: #4f46e5; --primary-600: #4338ca; --primary-50: #eef2ff; --green: #059669;
+    --shadow: 0 10px 40px rgba(15, 23, 42, .10); --radius: 18px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0b1020; --surface: #121a2e; --text: #e6e9f2; --muted: #a6b0c3; --faint: #8b95a8; --border: #24304a;
+      --primary: #818cf8; --primary-600: #a5b4fc; --primary-50: #1e1b4b; --green: #34d399; --shadow: 0 10px 40px rgba(0, 0, 0, .35);
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 17px/1.6 "Segoe UI", system-ui, -apple-system, Roboto, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: var(--primary); }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 0 16px; }
+  header { display: flex; align-items: center; gap: 14px; height: 64px; }
+  .marchio { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 19px; color: var(--text); text-decoration: none; }
+  .marchio img { width: 34px; height: 34px; }
+  header .btn { margin-left: auto; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 20px; border-radius: 12px; font-weight: 700; text-decoration: none; border: 0; cursor: pointer; font-size: 16px; font-family: inherit; }
+  .btn.primary { background: var(--primary); color: #fff; box-shadow: 0 6px 20px rgba(79, 70, 229, .35); }
+  .btn.primary:hover { background: var(--primary-600); }
+  .btn.ghost { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+  h1 { font-size: clamp(28px, 4vw, 42px); line-height: 1.12; letter-spacing: -.03em; margin: 18px 0 6px; }
+  .intro { color: var(--muted); margin: 0 0 22px; }
+  .layout { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 22px; align-items: start; }
+  .player { position: relative; border-radius: var(--radius); overflow: hidden; background: #0b1120; box-shadow: var(--shadow); }
+  video { display: block; width: 100%; height: auto; background: #0b1120; }
+  .avvia { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(11, 17, 32, .25); border: 0; cursor: pointer; }
+  .avvia span { display: grid; place-items: center; width: 92px; height: 92px; border-radius: 50%; background: #fff; color: #4338ca; font-size: 34px; box-shadow: 0 20px 50px rgba(0,0,0,.35); padding-left: 6px; }
+  .avvia em { position: absolute; bottom: 24px; color: #fff; font-style: normal; font-weight: 600; background: rgba(0,0,0,.45); padding: 6px 14px; border-radius: 99px; font-size: 15px; }
+  .fine { position: absolute; inset: 0; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 14px; text-align: center; padding: 20px;
+          background: linear-gradient(140deg, rgba(79,70,229,.94), rgba(14,159,110,.94)); color: #fff; }
+  .fine.on { display: flex; }
+  .fine h2 { margin: 0; font-size: clamp(24px, 3.4vw, 38px); letter-spacing: -.02em; }
+  .fine p { margin: 0; opacity: .9; }
+  .fine .azioni { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 8px; }
+  .fine .btn.primary { background: #fff; color: #4338ca; }
+  .fine .btn.ghost { background: transparent; color: #fff; border-color: rgba(255,255,255,.6); }
+  .barra { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 12px; color: var(--faint); font-size: 14px; }
+  .barra button { font: inherit; border: 1px solid var(--border); background: var(--surface); color: var(--text); border-radius: 99px; padding: 5px 12px; cursor: pointer; }
+  .barra button.on { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .barra .sep { flex: 1; }
+  aside { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+  aside h2 { font-size: 15px; margin: 0; padding: 16px 18px; border-bottom: 1px solid var(--border); color: var(--faint); text-transform: uppercase; letter-spacing: .06em; }
+  ol { list-style: none; margin: 0; padding: 6px; }
+  li button { width: 100%; text-align: left; display: grid; grid-template-columns: 30px 1fr auto; gap: 10px; align-items: center; padding: 11px 12px; border: 0; border-radius: 12px;
+              background: transparent; color: var(--text); font: inherit; cursor: pointer; position: relative; overflow: hidden; }
+  li button:hover { background: var(--primary-50); }
+  li button.on { background: var(--primary-50); font-weight: 700; }
+  li .n { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 13px; font-weight: 700; background: var(--bg); color: var(--faint); }
+  li button.on .n, li button.visto .n { background: var(--primary); color: #fff; }
+  li .t { font-size: 13px; color: var(--faint); font-variant-numeric: tabular-nums; }
+  li .avanz { position: absolute; left: 0; bottom: 0; height: 3px; background: var(--primary); width: 0; transition: width .25s linear; }
+  .scheda { margin: 6px 12px 14px; padding: 14px; border-radius: 14px; background: var(--bg); font-size: 15px; color: var(--muted); min-height: 96px; }
+  .scheda b { color: var(--text); display: block; margin-bottom: 4px; }
+  .cta-lato { display: flex; flex-direction: column; gap: 8px; padding: 0 12px 14px; }
+  footer { color: var(--faint); font-size: 14px; padding: 34px 0 40px; }
+  @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+  @media (max-width: 700px) { .player { max-width: 420px; margin: 0 auto; } }
+</style>
+<script src="sito.js"></script>
+</head>
+<body>
+<div class="wrap">
+  <header><a class="marchio" href="/"><img src="img/logo.png" alt="">SwitchManager</a><a class="btn primary" href="/#prova">Prova gratis</a></header>
+  <h1>SwitchManager in 2 minuti</h1>
+  <p class="intro">Dalla bolletta del cliente al preventivo con il tuo logo. Clicca su un capitolo per saltare a quello che ti interessa.</p>
+
+  <div class="layout">
+    <div>
+      <div class="player">
+        <video id="v" playsinline preload="metadata" poster="video/poster.jpg">
+          <track kind="captions" srclang="it" label="Italiano" src="video/switchmanager-demo.vtt" default>
+        </video>
+        <button class="avvia" id="avvia" aria-label="Guarda il video"><span>▶</span><em>Audio attivo · 1 min 45 s</em></button>
+        <div class="fine" id="fine">
+          <h2>Provalo sui tuoi clienti</h2>
+          <p>30 giorni gratis, tutte le funzioni, senza carta.</p>
+          <div class="azioni">
+            <a class="btn primary" href="scarica.html">⬇ Scarica per Windows</a>
+            <a class="btn ghost" href="/#prezzi">Vedi i prezzi</a>
+            <button class="btn ghost" id="rivedi">↺ Rivedi</button>
+          </div>
+        </div>
+      </div>
+      <div class="barra">
+        <span>Velocità</span><button data-v="1" class="on">1×</button><button data-v="1.25">1,25×</button><button data-v="1.5">1,5×</button>
+        <span class="sep"></span><span>Sottotitoli inclusi: si capisce anche senza audio</span>
+      </div>
+    </div>
+
+    <aside>
+      <h2>Capitoli</h2>
+      <ol id="capitoli"></ol>
+      <div class="scheda" id="scheda"></div>
+      <div class="cta-lato">
+        <a class="btn primary" href="scarica.html">⬇ Scarica e prova gratis</a>
+        <a class="btn ghost" href="/#prezzi">Prezzi · IVA inclusa</a>
+      </div>
+    </aside>
+  </div>
+  <footer>© SwitchManager · <a href="/">switchmanager.it</a> · <a href="privacy.html">Privacy</a></footer>
+</div>
+
+<script>
+// capitoli (generati da crea_video.py) e cosa raccontare accanto a ognuno
+const DATI = /*CAPITOLI*/{"durata": 0, "capitoli": []}/*FINE*/;
+const SCHEDE = {
+  intro: ['Per chi è', 'Consulenti e agenzie luce e gas che fanno preventivi ogni giorno.'],
+  bolletta: ['Costo della lettura: 0 €', 'I PDF si leggono sul tuo computer. Per foto e scansioni c\'è l\'AI, inclusa nella licenza.'],
+  classifica: ['Classifica onesta', 'Ordinata solo per il risparmio del cliente: la tua provvigione la vedi, ma non cambia l\'ordine.'],
+  preventivo: ['Con il tuo marchio', 'Logo, nome e contatti della tua agenzia su ogni preventivo.'],
+  opportunita: ['Più contratti', 'Ogni nuova offerta trova da sola i clienti a cui conviene.'],
+  pratiche: ['Fino all\'incasso', 'Firmata, inviata, attiva, incassata. Con gli storni separati.'],
+  cruscotto: ['Mercato aggiornato', 'PUN e PSV dalle fonti ufficiali GME e ARERA.'],
+  finale: ['Prova gratuita', '30 giorni con tutte le funzioni. Poi 290 € l\'anno o 29 € al mese, IVA inclusa.'],
+};
+const v = document.getElementById('v'), lista = document.getElementById('capitoli'), scheda = document.getElementById('scheda');
+const stretto = matchMedia('(max-width: 700px)').matches;
+v.src = stretto ? 'video/switchmanager-demo-verticale.mp4' : 'video/switchmanager-demo.mp4';
+const caps = DATI.capitoli.map((c, i, a) => ({ ...c, fine: i + 1 < a.length ? a[i + 1].inizio : DATI.durata }));
+const mmss = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+caps.forEach((c, i) => {
+  const li = document.createElement('li');
+  li.innerHTML = `<button><span class="n">${i + 1}</span><span>${c.titolo}</span><span class="t">${mmss(c.inizio)}</span><span class="avanz"></span></button>`;
+  li.firstChild.onclick = () => { v.currentTime = c.inizio + 0.05; avvia(); };
+  lista.appendChild(li);
+});
+const bottoni = [...lista.querySelectorAll('button')];
+let attivo = -1;
+function aggiorna() {
+  const t = v.currentTime;
+  const i = Math.max(0, caps.findIndex(c => t >= c.inizio && t < c.fine));
+  bottoni.forEach((b, k) => {
+    b.classList.toggle('on', k === i);
+    b.classList.toggle('visto', t >= caps[k].fine);
+    const p = Math.min(1, Math.max(0, (t - caps[k].inizio) / (caps[k].fine - caps[k].inizio)));
+    b.querySelector('.avanz').style.width = (k === i ? p * 100 : (t >= caps[k].fine ? 100 : 0)) + '%';
+  });
+  if (i !== attivo) {
+    attivo = i;
+    const [tit, txt] = SCHEDE[caps[i].id] || ['', ''];
+    scheda.innerHTML = `<b>${tit}</b>${txt}`;
+  }
+}
+function avvia() {
+  document.getElementById('avvia').style.display = 'none';
+  document.getElementById('fine').classList.remove('on');
+  v.controls = true; v.play();
+}
+document.getElementById('avvia').onclick = avvia;
+document.getElementById('rivedi').onclick = () => { v.currentTime = 0; avvia(); };
+v.addEventListener('timeupdate', aggiorna);
+v.addEventListener('ended', () => document.getElementById('fine').classList.add('on'));
+document.querySelectorAll('.barra [data-v]').forEach(b => b.onclick = () => {
+  v.playbackRate = Number(b.dataset.v);
+  document.querySelectorAll('.barra [data-v]').forEach(x => x.classList.toggle('on', x === b));
+});
+// i sottotitoli sono già nel video: la traccia del browser resta nascosta (serve per accessibilità e ricerca)
+v.addEventListener('loadedmetadata', () => { if (v.textTracks[0]) v.textTracks[0].mode = 'hidden'; });
+aggiorna();
+</script>
+</body>
+</html>
