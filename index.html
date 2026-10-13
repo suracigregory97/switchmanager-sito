@@ -229,9 +229,9 @@
         </div>
       </div>
       <div class="solo-telefono">
-        <p class="intro" style="margin-bottom:16px">SwitchManager è un programma per <b>PC Windows</b>. Lasciaci la tua email (o il WhatsApp) e ti mandiamo il link da aprire sul computer.</p>
+        <p class="intro" style="margin-bottom:16px">SwitchManager è un programma per <b>PC Windows</b>. Lasciaci la tua email e ti mandiamo il link da aprire sul computer.</p>
         <form id="link-pc" class="link-pc" novalidate>
-          <div><label for="l-contatto">Email o numero WhatsApp</label><input id="l-contatto" name="contatto" required autocomplete="email" placeholder="nome@email.it oppure 333 1234567"></div>
+          <div><label for="l-email">La tua email</label><input id="l-email" name="email" type="email" required autocomplete="email" inputmode="email" placeholder="nome@email.it"></div>
           <input class="esca" name="sito_web" tabindex="-1" autocomplete="off" aria-hidden="true">
           <label class="consenso"><input type="checkbox" id="l-ok" required> <span>Ho letto l'<a href="privacy.html" target="_blank">informativa privacy</a> e acconsento a ricevere il link e a essere ricontattato.</span></label>
           <button class="btn primary" type="submit">Mandami il link per il PC</button>
@@ -269,25 +269,22 @@
   const telefono = document.documentElement.classList.contains('telefono');
   if (telefono) document.querySelectorAll('[data-mobile]').forEach(a => { a.textContent = a.dataset.mobile; });
 
-  // dal telefono: link per il PC via email o WhatsApp
+  // dal telefono: link per il PC via email
   const fl = document.getElementById('link-pc'), lEsito = document.getElementById('l-esito');
   fl.addEventListener('submit', async e => {
     e.preventDefault();
     const d = Object.fromEntries(new FormData(fl));
     if (d.sito_web) return;
-    const c = d.contatto.trim(), cifre = c.replace(/[\s.\-()]/g, '');
-    const email = /^\S+@\S+\.\S+$/.test(c) ? c : '', tel = !email && /^\+?\d{8,15}$/.test(cifre) ? cifre : '';
+    const email = d.email.trim();
     lEsito.style.color = '#dc2626';
-    if (!email && !tel) { lEsito.textContent = 'Scrivi un\'email o un numero di telefono valido.'; return; }
+    if (!/^\S+@\S+\.\S+$/.test(email)) { lEsito.textContent = 'Scrivi un indirizzo email valido.'; return; }
     if (!document.getElementById('l-ok').checked) { lEsito.textContent = 'Serve il consenso per mandarti il link.'; return; }
     const btn = fl.querySelector('button'); btn.disabled = true; btn.textContent = 'Invio…';
     try {
-      await invia({ modulo: 'link_pc', email, telefono: tel });
+      await invia({ modulo: 'link_pc', email });
       SM.traccia('Lead', { content_name: 'link_pc' });
       fl.hidden = true;
-      document.getElementById('l-dove').textContent = email
-        ? ` Ti abbiamo mandato il link a ${email}: se non lo vedi, controlla anche lo spam.`
-        : ' Ti scriviamo su WhatsApp con il link da aprire sul computer.';
+      document.getElementById('l-dove').textContent = ` Ti abbiamo mandato il link a ${email}: se non lo vedi, controlla anche lo spam.`;
       document.getElementById('l-fatto').hidden = false;
     } catch (err) { lEsito.textContent = 'Invio non riuscito: riprova tra poco.'; btn.disabled = false; btn.textContent = 'Mandami il link per il PC'; }
   });
