@@ -14,6 +14,7 @@
   a { color: var(--primary); font-weight: 700; }
   p { color: var(--muted); }
 </style>
+<script src="sito.js"></script>
 </head>
 <body>
 <div>
@@ -25,6 +26,7 @@
   // indirizzo fisso dell'ultima versione pubblicata
   const u = ['https://github.com', 'suracigregory97', 'switch-manager-aggiornamenti', 'releases/latest/download/SwitchManager-Setup.exe'].join('/');
   document.getElementById('link').href = u;
+  SM.traccia('DownloadTrial');   // si arriva qui solo da "Scarica per Windows" o dal link mandato per email
   setTimeout(() => { location.href = u; }, 400);
 </script>
 </body>
