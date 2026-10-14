@@ -122,6 +122,106 @@
   footer { border-top: 1px solid var(--border); padding: 30px 0 44px; color: var(--faint); font-size: 14px; }
   footer .wrap { display: flex; gap: 18px; flex-wrap: wrap; justify-content: space-between; }
   footer a { color: var(--faint); }
+
+  /* ===================== Animazioni allo scorrimento =====================
+     Solo transform e opacity. Gli stati "nascosti" valgono solo con html.js-anim (aggiunta da sito.js)
+     e solo se l'utente non ha chiesto di ridurre il movimento. */
+  :root { --ease: cubic-bezier(.2, .7, .2, 1); --dur: 600ms; --sp: 24px; }
+  @media (max-width: 767px) { :root { --dur: 480ms; --sp: 16px; } }
+
+  /* Intestazione: lo sfondo è un livello a parte, così compattarla non sposta nulla (CLS 0) */
+  header.top { background: none; border-bottom: 0; backdrop-filter: none; }
+  header.top::before { content: ""; position: absolute; inset: 0; z-index: -1; background: color-mix(in srgb, var(--bg) 82%, transparent);
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border);
+    transform-origin: top; transition: transform 300ms var(--ease); }
+  header.top::after { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 64px; z-index: -1; pointer-events: none;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, .10); opacity: 0; transform: scaleY(.8125); transform-origin: top; transition: opacity 300ms var(--ease); }
+  header.top .wrap { transition: transform 300ms var(--ease); }
+  header.top.compatta::before { transform: scaleY(.8125); }            /* 64px -> 52px */
+  header.top.compatta::after { opacity: 1; }
+  header.top.compatta .wrap { transform: translateY(-6px) scale(.94); }
+  .avanzamento { position: fixed; left: 0; top: 0; width: 100%; height: 3px; z-index: 20; background: var(--grad);
+    transform: scaleX(0); transform-origin: left; pointer-events: none; }
+
+  /* Cronometro sulla barra della schermata (senza JS resta su 1:48) */
+  .schermo .barra { position: relative; }
+  .cronometro { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); display: inline-flex; align-items: center; gap: 6px;
+    padding: 2px 10px; border-radius: 99px; background: var(--primary-50); color: var(--primary); font-size: 12.5px; font-weight: 700;
+    font-variant-numeric: tabular-nums; }
+
+  /* Linea che unisce i passi di "Come funziona" */
+  #come .wrap { position: relative; }
+  .linea-passi { position: absolute; left: 4px; width: 2px; border-radius: 2px; background: var(--grad); opacity: .55;
+    transform: scaleY(0); transform-origin: top; pointer-events: none; }
+  @media (max-width: 860px) { .linea-passi { left: 2px; } }
+
+  /* Funzioni: ombra al passaggio del mouse su un livello a parte (si anima solo l'opacità) */
+  .funzioni > div { position: relative; transition: transform 250ms var(--ease); }
+  .funzioni > div::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: var(--shadow); opacity: 0;
+    transition: opacity 250ms var(--ease); pointer-events: none; }
+  @media (hover: hover) {
+    .funzioni > div:hover, #funzioni .funzioni > div.in:hover { transform: translateY(-4px); }
+    .funzioni > div:hover::after { opacity: 1; }
+  }
+
+  /* Domande: freccia che ruota */
+  summary { list-style: none; position: relative; padding-right: 28px; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "›"; position: absolute; right: 2px; top: 50%; margin-top: -.55em; line-height: 1; font-size: 22px;
+    color: var(--faint); transition: transform 300ms var(--ease); }
+  details[open] > summary::after, details.aperto > summary::after { transform: rotate(90deg); }
+  details.chiusura > summary::after { transform: none; }
+  details { overflow: hidden; }
+
+  /* Pulsante "Scarica" / "Mandami il link": un riflesso che lo attraversa una volta */
+  #prova .btn.primary { position: relative; overflow: hidden; }
+  #prova .btn.primary::after { content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 60%; pointer-events: none;
+    background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .45), transparent); transform: translateX(-120%) skewX(-12deg); }
+
+  @keyframes sm-sale { from { opacity: 0; transform: translateY(var(--sp)); } to { opacity: 1; transform: none; } }
+  @keyframes sm-sale-solo { from { transform: translateY(calc(var(--sp) * .6)); } to { transform: none; } }
+  @keyframes sm-pop { 0% { transform: scale(.6); } 70% { transform: scale(1.08); } 100% { transform: scale(1); } }
+  @keyframes sm-rimbalzo { 0% { transform: translateY(8px) scale(.85); } 60% { transform: translateY(-3px) scale(1.06); } 100% { transform: none; } }
+  @keyframes sm-impulso { 0% { transform: scale(1); } 45% { transform: scale(1.12); } 100% { transform: scale(1); } }
+  @keyframes sm-riflesso { from { transform: translateX(-120%) skewX(-12deg); } to { transform: translateX(260%) skewX(-12deg); } }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* Hero: sequenza all'apertura, tutto entro 1 secondo. Titolo e schermata visibili da subito (solo un piccolo spostamento) */
+    .js-anim .hero .etichetta, .js-anim .hero p.sotto, .js-anim .hero .azioni, .js-anim .hero .nota { animation: sm-sale var(--dur) var(--ease) both; }
+    .js-anim .hero h1 { animation: sm-sale-solo var(--dur) var(--ease) 80ms both; }
+    .js-anim .hero p.sotto { animation-delay: 160ms; }
+    .js-anim .hero .azioni { animation-delay: 240ms; }
+    .js-anim .hero .nota { animation-delay: 320ms; }
+
+    /* Elementi che entrano allo scorrimento: partono nascosti, compaiono con .in */
+    .js-anim :where(.punti > div, #come h2, #come .intro, .passo .testo, .passo .immagine, #funzioni h2, #funzioni .intro, .funzioni > div,
+      #prezzi h2, #prezzi .intro, #prezzi .etichetta, .piano, #domande h2, details, #prova h2, #prova form) {
+      opacity: 0; transform: translateY(var(--sp));
+      transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease); transition-delay: calc(var(--i, 0) * 80ms); }
+    .js-anim .passo .testo { transform: translateX(calc(var(--sp) * -1)); }
+    .js-anim .passo .immagine { transform: translateX(var(--sp)); }
+    .js-anim .passo:nth-child(even) .testo { transform: translateX(var(--sp)); }
+    .js-anim .passo:nth-child(even) .immagine { transform: translateX(calc(var(--sp) * -1)); }
+    .js-anim .funzioni > div { transition-delay: calc(var(--i, 0) * 70ms); }
+    .js-anim .piano { transition-delay: calc(var(--i, 0) * 90ms); }
+    .js-anim .piano.top { transform: translateY(var(--sp)) scale(.97); transition-delay: 300ms; }
+    /* :is con un id: vince su tutte le posizioni di partenza qui sopra */
+    .js-anim .in:is(.punti > div, #come h2, #come .intro, .passo .testo, .passo .immagine, #funzioni h2, #funzioni .intro, .funzioni > div,
+      #prezzi h2, #prezzi .intro, #prezzi .etichetta, .piano, #domande h2, details, #prova h2, #prova form) { opacity: 1; transform: none; }
+    /* dopo l'ingresso le card tornano a reagire subito al mouse */
+    .js-anim .funzioni > div.fatto-in { transition: transform 250ms var(--ease); transition-delay: 0s; }
+
+    .js-anim #come .passo .n { transform: scale(.6); }
+    .js-anim #come .passo .testo.in .n { animation: sm-pop 500ms var(--ease) 200ms both; }
+    .js-anim .funzioni > div.in .ic { animation: sm-rimbalzo 600ms var(--ease) calc(var(--i, 0) * 70ms + 150ms) both; }
+    .js-anim .piano.top.in::before { animation: sm-impulso 700ms var(--ease) 950ms 1; }
+    .js-anim #prova .btn.primary.in::after { animation: sm-riflesso 900ms var(--ease) 350ms 1 both; }
+
+    /* Schermata in prospettiva che si raddrizza scorrendo: solo da desktop */
+    @media (min-width: 768px) {
+      .js-anim .hero .schermo { transform: perspective(1400px) rotateX(10deg) scale(.96); transform-origin: 50% 0; will-change: transform; }
+    }
+  }
 </style>
 <script>
   // telefono o tablet: il programma è per Windows, quindi al posto del download si offre il link da aprire sul PC
@@ -144,7 +244,7 @@
   <p class="sotto">SwitchManager legge la bolletta del cliente, la confronta con le tue offerte e prepara il preventivo con il risparmio, pronto da mandare su WhatsApp. E ti dice ogni giorno chi richiamare.</p>
   <div class="azioni"><a class="btn primary" href="#prova" data-mobile="Mandami il link per il PC">Prova gratis 30 giorni</a><a class="btn ghost" href="#come">Guarda come funziona</a></div>
   <div class="nota">Nessuna carta richiesta · Windows 10 e 11 · in italiano</div>
-  <div class="schermo"><div class="barra"><i></i><i></i><i></i></div><img src="img/classifica.webp" alt="Classifica delle offerte con il risparmio stimato per il cliente" width="1600" height="963"></div>
+  <div class="schermo"><div class="barra"><i></i><i></i><i></i><span class="cronometro" aria-label="Preventivo pronto in 1 minuto e 48 secondi">⏱ <span id="cronometro">1:48</span></span></div><img src="img/classifica.webp" alt="Classifica delle offerte con il risparmio stimato per il cliente" width="1600" height="963"></div>
   <div class="punti">
     <div><b>Lettura gratuita</b>La bolletta PDF si legge sul tuo PC, senza costi</div>
     <div><b>Confronto alla pari</b>Solo la parte che cambia tra i fornitori</div>
