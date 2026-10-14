@@ -8,6 +8,117 @@ var SM_CONFIG = {
 };
 
 // =====================================================================================
+// Animazioni allo scorrimento (solo pagina principale). La classe js-anim si aggiunge subito,
+// prima che la pagina venga disegnata: senza JavaScript o con "riduci movimento" tutto resta visibile.
+// =====================================================================================
+(function () {
+  var fermo = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!fermo && 'IntersectionObserver' in window) document.documentElement.classList.add('js-anim');
+
+  function avvia() {
+    var header = document.querySelector('header.top');
+    if (!header || !document.querySelector('.hero')) return;   // altre pagine: niente animazioni
+    var desktop = matchMedia('(min-width: 768px)').matches;
+
+    // barra di avanzamento della lettura
+    var barra = document.createElement('div');
+    barra.className = 'avanzamento'; barra.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(barra);
+
+    var schermo = document.querySelector('.hero .schermo');
+    var come = document.getElementById('come');
+    var passi = come ? come.querySelectorAll('.passo') : [];
+    var linea = null;
+    if (passi.length > 1) {
+      linea = document.createElement('div');
+      linea.className = 'linea-passi'; linea.setAttribute('aria-hidden', 'true');
+      come.querySelector('.wrap').appendChild(linea);
+    }
+    function posizionaLinea() {
+      if (!linea) return;
+      var primo = passi[0], ultimo = passi[passi.length - 1];
+      linea.style.top = primo.offsetTop + 'px';
+      linea.style.height = (ultimo.offsetTop + ultimo.offsetHeight - primo.offsetTop) + 'px';
+    }
+    posizionaLinea();
+    addEventListener('resize', posizionaLinea);
+    addEventListener('load', posizionaLinea);
+
+    var attesa = false;
+    function aggiorna() {
+      attesa = false;
+      var y = scrollY, max = document.documentElement.scrollHeight - innerHeight;
+      header.classList.toggle('compatta', y > 40);
+      barra.style.transform = 'scaleX(' + (max > 0 ? Math.min(1, y / max) : 0) + ')';
+      if (fermo) return;
+      if (schermo && desktop) {
+        var p = Math.min(1, y / 400);
+        schermo.style.transform = p >= 1 ? 'none'
+          : 'perspective(1400px) rotateX(' + (10 * (1 - p)).toFixed(2) + 'deg) scale(' + (0.96 + 0.04 * p).toFixed(4) + ')';
+      }
+      if (linea) {
+        var r = come.getBoundingClientRect();
+        var q = Math.max(0, Math.min(1, (innerHeight * 0.6 - r.top - linea.offsetTop) / linea.offsetHeight));
+        linea.style.transform = 'scaleY(' + q.toFixed(3) + ')';
+      }
+    }
+    addEventListener('scroll', function () { if (!attesa) { attesa = true; requestAnimationFrame(aggiorna); } }, { passive: true });
+    aggiorna();
+
+    // cronometro: da 0:00 a 1:48 la prima volta che entra in vista
+    var crono = document.getElementById('cronometro');
+    function contaCronometro() {
+      var fine = 108, durata = 1400, t0 = performance.now();
+      (function passo(t) {
+        var p = Math.min(1, (t - t0) / durata), s = Math.round(fine * (1 - Math.pow(1 - p, 3)));
+        crono.textContent = Math.floor(s / 60) + ':' + ('0' + s % 60).slice(-2);
+        if (p < 1) requestAnimationFrame(passo);
+      })(t0);
+    }
+
+    // domande: apertura e chiusura fluida
+    if (!fermo && Element.prototype.animate) document.querySelectorAll('#domande details').forEach(function (d) {
+      var s = d.querySelector('summary');
+      s.addEventListener('click', function (e) {
+        e.preventDefault();
+        if (d._anim) d._anim.cancel();
+        var da = d.offsetHeight, a;
+        if (d.open) {
+          var cs = getComputedStyle(d);
+          d.classList.add('chiusura');
+          a = s.offsetHeight + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.borderTopWidth) + parseFloat(cs.borderBottomWidth);
+        }
+        else { d.open = true; a = d.offsetHeight; }
+        d._anim = d.animate({ height: [da + 'px', a + 'px'] }, { duration: 320, easing: 'cubic-bezier(.2,.7,.2,1)' });
+        d._anim.onfinish = function () { d._anim = null; if (d.classList.contains('chiusura')) { d.open = false; d.classList.remove('chiusura'); } };
+      });
+    });
+
+    if (fermo || !('IntersectionObserver' in window)) return;
+
+    // ritardi in sequenza dentro ogni gruppo
+    [['.punti > div'], ['.funzioni > div'], ['.prezzi .piano']].forEach(function (g) {
+      document.querySelectorAll(g[0]).forEach(function (el, i) { el.style.setProperty('--i', i); });
+    });
+    var bersagli = '.punti > div, #come h2, #come .intro, .passo .testo, .passo .immagine, #funzioni h2, #funzioni .intro, .funzioni > div,' +
+      ' #prezzi h2, #prezzi .intro, #prezzi .etichetta, .piano, #domande h2, #domande details, #prova h2, #prova form, #prova .btn.primary, .schermo .barra';
+    var oss = new IntersectionObserver(function (voci) {
+      voci.forEach(function (v) {
+        if (!v.isIntersecting) return;
+        var el = v.target;
+        el.classList.add('in');
+        oss.unobserve(el);
+        if (el.classList.contains('barra') && crono) contaCronometro();
+        if (el.matches('.funzioni > div')) setTimeout(function () { el.classList.add('fatto-in'); }, 900);
+      });
+    }, { threshold: 0.15 });
+    if (crono) crono.textContent = '0:00';
+    document.querySelectorAll(bersagli).forEach(function (el) { oss.observe(el); });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', avvia); else avvia();
+})();
+
+// =====================================================================================
 // Consenso cookie, Meta Pixel, UTM. Il Pixel si carica solo dopo "Accetta".
 // =====================================================================================
 (function () {
