@@ -82,6 +82,13 @@
   .piano.top { border: 2px solid var(--primary); box-shadow: var(--shadow); position: relative; }
   .piano.top::before { content: "Il più scelto"; position: absolute; top: -13px; left: 24px; background: var(--primary); color: #fff; font-size: 13px; font-weight: 700; padding: 3px 12px; border-radius: 99px; }
   .piano h3 { margin: 0; font-size: 20px; }
+  /* offerta lancio: prezzo barrato e nastro al posto di "Il più scelto" */
+  .piano .prezzo s { font-size: .5em; color: var(--faint); font-weight: 600; margin-right: 4px; }
+  .piano .al-mese { margin: 4px 0 0; color: var(--green); font-weight: 700; font-size: 15px; }
+  .piano .nastro { align-self: flex-start; margin: -6px 0 12px; padding: 4px 12px; border-radius: 99px; background: var(--green-50); color: var(--green);
+    font-size: 12.5px; font-weight: 800; }
+  html.lancio .piano.top::before { content: none; }
+  .nota-lancio { margin: 18px 0 0; padding: 12px 16px; border-radius: 12px; background: var(--primary-50); color: var(--text); font-size: 15px; }
   .piano .prezzo { font-size: 44px; font-weight: 800; letter-spacing: -.03em; margin: 10px 0 0; }
   .piano .prezzo small { font-size: 16px; color: var(--faint); font-weight: 600; }
   .piano ul { padding: 0; list-style: none; margin: 18px 0 24px; color: var(--muted); font-size: 15.5px; }
@@ -231,6 +238,8 @@
 <script src="sito.js"></script>
 </head>
 <body>
+<div class="fascia-lancio" role="note"><div><span>Offerta lancio per i primi 50 consulenti: SwitchManager a <b>99 €/anno</b> o <b>11 €/mese</b>, IVA inclusa. Prezzo bloccato per sempre.</span><a href="#prezzi">Vedi i prezzi</a></div></div>
+
 <header class="top"><div class="wrap">
   <a class="marchio" href="#"><img src="img/logo.png" alt="">SwitchManager</a>
   <nav class="menu"><a href="#come">Come funziona</a><a href="#funzioni">Funzioni</a><a href="#prezzi">Prezzi</a><a href="#domande">Domande</a>
@@ -293,13 +302,21 @@
     <div class="piano"><h3>Prova gratuita</h3><div class="prezzo">0 €<small> / 30 giorni</small></div>
       <ul><li>Tutte le funzioni</li><li>Nessuna carta richiesta</li><li>Alla fine i tuoi dati restano consultabili</li></ul>
       <a class="btn ghost" href="#prova" data-mobile="Mandami il link per il PC">Scarica e prova</a></div>
-    <div class="piano top"><h3>Annuale</h3><div class="prezzo">290 €<small> / anno</small></div>
-      <ul><li>2 mesi gratis rispetto al mensile</li><li>Aggiornamenti inclusi</li><li>Assistenza via WhatsApp ed email</li></ul>
-      <a class="btn primary" href="https://buy.stripe.com/9B600k3qWbEJ0TF1UFa3u00" target="_blank" rel="noopener" data-acquisto="annuale" data-valore="290">Acquista l'annuale</a></div>
-    <div class="piano"><h3>Mensile</h3><div class="prezzo">29 €<small> / mese</small></div>
+    <div class="piano top"><span class="nastro solo-lancio">Offerta lancio – prezzo bloccato per sempre</span><h3>Annuale</h3>
+      <div class="prezzo solo-normale">290 €<small> / anno</small></div>
+      <div class="prezzo solo-lancio"><s>290 €</s> 99 €<small> / anno</small></div>
+      <p class="al-mese solo-lancio">circa 8,25 €/mese – il più conveniente</p>
+      <ul><li class="solo-normale">2 mesi gratis rispetto al mensile</li><li class="solo-lancio">3 mesi gratis rispetto al mensile</li><li>Aggiornamenti inclusi</li><li>Assistenza via WhatsApp ed email</li></ul>
+      <a class="btn primary solo-normale" href="https://buy.stripe.com/9B600k3qWbEJ0TF1UFa3u00" target="_blank" rel="noopener" data-link="annuale" data-acquisto="annuale" data-valore="290">Acquista l'annuale</a>
+      <a class="btn primary solo-lancio" href="#prezzi" target="_blank" rel="noopener" data-link="lancio_annuale" data-acquisto="annuale" data-valore="99">Acquista l'annuale a 99 €</a></div>
+    <div class="piano"><span class="nastro solo-lancio">Offerta lancio – prezzo bloccato per sempre</span><h3>Mensile</h3>
+      <div class="prezzo solo-normale">29 €<small> / mese</small></div>
+      <div class="prezzo solo-lancio"><s>29 €</s> 11 €<small> / mese</small></div>
       <ul><li>Tutte le funzioni</li><li>Aggiornamenti inclusi</li><li>Nessun vincolo: rinnovi solo se vuoi</li></ul>
-      <a class="btn ghost" href="https://buy.stripe.com/bJebJ2d1w105aufbvfa3u01" target="_blank" rel="noopener" data-acquisto="mensile" data-valore="29">Acquista il mensile</a></div>
+      <a class="btn ghost solo-normale" href="https://buy.stripe.com/bJebJ2d1w105aufbvfa3u01" target="_blank" rel="noopener" data-link="mensile" data-acquisto="mensile" data-valore="29">Acquista il mensile</a>
+      <a class="btn ghost solo-lancio" href="#prezzi" target="_blank" rel="noopener" data-link="lancio_mensile" data-acquisto="mensile" data-valore="11">Acquista il mensile a 11 €</a></div>
   </div>
+  <p class="nota-lancio solo-lancio">La prova gratuita di 30 giorni resta disponibile. Il prezzo lancio resta tuo a ogni rinnovo: riacquisti con lo stesso codice PC e paghi sempre 99 €/anno o 11 €/mese.</p>
   <p class="nota">Prezzi per singolo computer. Intelligenza artificiale inclusa: bollette e CTE si leggono con l'AI senza chiavi e senza costi aggiuntivi (300 bollette e 40 CTE al mese per licenza, più che sufficienti per un consulente).</p>
 </div></section>
 
