@@ -8,8 +8,8 @@ var SM_CONFIG = {
   LINK: {
     annuale: 'https://buy.stripe.com/9B600k3qWbEJ0TF1UFa3u00',          // 290 € / 12 mesi
     mensile: 'https://buy.stripe.com/bJebJ2d1w105aufbvfa3u01',          // 29 € / 1 mese
-    lancio_annuale: '',                                                  // 99 € / 12 mesi (da creare su Stripe)
-    lancio_mensile: ''                                                   // 11 € / 1 mese (da creare su Stripe)
+    lancio_annuale: 'https://buy.stripe.com/14A4gAe5A6kp59Vbvfa3u02',                                                // 99 € / 12 mesi
+    lancio_mensile: 'https://buy.stripe.com/cNi00k8LgaAF0TFfLva3u03'                                                // 11 € / 1 mese
   },
   PIXEL_ID: '942098881955871',   // Meta Pixel "SwitchManager sito"
   // le richieste dei moduli arrivano nel Foglio Google dell'editore, scheda "Richieste"
