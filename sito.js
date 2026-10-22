@@ -2,10 +2,53 @@
 // CONFIGURAZIONE DEL SITO: unico punto da modificare
 // =====================================================================================
 var SM_CONFIG = {
+  // Offerta lancio: true = fascia in alto e prezzi lancio sul sito; false = prezzi normali (l'offerta si chiude a mano).
+  // Chi ha già comprato col lancio continua a rinnovare a quel prezzo anche dopo: il programma apre il sito con ?pc=...
+  OFFERTA_LANCIO: true,
+  LINK: {
+    annuale: 'https://buy.stripe.com/9B600k3qWbEJ0TF1UFa3u00',          // 290 € / 12 mesi
+    mensile: 'https://buy.stripe.com/bJebJ2d1w105aufbvfa3u01',          // 29 € / 1 mese
+    lancio_annuale: '',                                                  // 99 € / 12 mesi (da creare su Stripe)
+    lancio_mensile: ''                                                   // 11 € / 1 mese (da creare su Stripe)
+  },
   PIXEL_ID: '942098881955871',   // Meta Pixel "SwitchManager sito"
   // le richieste dei moduli arrivano nel Foglio Google dell'editore, scheda "Richieste"
   DESTINAZIONE: 'https://script.google.com/macros/s/AKfycby_mgLsuPlT4xTHtmFmE717bRmoVfCvl5WozujGseCcHpLIkouv9jDrv6sXRZ14KK5ztA/exec'
 };
+
+// =====================================================================================
+// Offerta lancio: la classe "lancio" su <html> si decide subito (prima del disegno: niente salti di layout).
+// Con ?pc=CODICE (link dal programma) i pulsanti di acquisto portano il codice PC a Stripe e, a offerta
+// chiusa, chi ha già comprato col lancio rivede i suoi prezzi (lo chiede allo script delle vendite).
+// =====================================================================================
+(function () {
+  var q = new URLSearchParams(location.search), pc = (q.get('pc') || '').toUpperCase().replace(/[^A-Z0-9-]/g, '').slice(0, 14);
+  try { if (pc) sessionStorage.setItem('sm_pc', pc); else pc = sessionStorage.getItem('sm_pc') || ''; } catch (e) { }
+  var L = SM_CONFIG.LINK, pronti = !!(L.lancio_annuale && L.lancio_mensile);
+  if (SM_CONFIG.OFFERTA_LANCIO && pronti) document.documentElement.classList.add('lancio', 'lancio-aperta');
+
+  var st = document.createElement('style');
+  st.textContent = 'html:not(.lancio) .solo-lancio{display:none!important}html.lancio .solo-normale{display:none!important}' +
+    'html:not(.lancio-aperta) .fascia-lancio{display:none}' +
+    '.fascia-lancio{background:linear-gradient(135deg,#4f46e5,#059669);color:#fff;font:600 14.5px/1.45 "Segoe UI",system-ui,sans-serif}' +
+    '.fascia-lancio div{max-width:1160px;margin:0 auto;padding:9px 20px;display:flex;gap:10px 16px;align-items:center;justify-content:center;flex-wrap:wrap;text-align:center}' +
+    '.fascia-lancio a{color:#4338ca;background:#fff;border-radius:99px;padding:5px 14px;font-weight:800;text-decoration:none;white-space:nowrap}';
+  document.head.appendChild(st);
+
+  function collega() {
+    document.querySelectorAll('[data-link]').forEach(function (a) {
+      var u = L[a.getAttribute('data-link')];
+      if (u) a.href = u + (pc ? (u.indexOf('?') < 0 ? '?' : '&') + 'client_reference_id=' + encodeURIComponent(pc) : '');
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', collega); else collega();
+
+  // offerta chiusa: un cliente lancio che rinnova dal programma rivede i prezzi lancio
+  if (pc && pronti && !SM_CONFIG.OFFERTA_LANCIO && window.fetch) {
+    fetch(SM_CONFIG.DESTINAZIONE + '?azione=listino&pc=' + encodeURIComponent(pc)).then(function (r) { return r.json(); })
+      .then(function (d) { if (d && d.lancio) document.documentElement.classList.add('lancio'); }).catch(function () { });
+  }
+})();
 
 // =====================================================================================
 // Animazioni allo scorrimento (solo pagina principale). La classe js-anim si aggiunge subito,
